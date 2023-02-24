@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   await prisma.user.deleteMany();
-  const user = await prisma.user.create({
+  await prisma.user.create({
     data: {
       name: "Umair Khan",
       email: "umair.khan@gmail.com",
@@ -14,10 +14,13 @@ async function main() {
         },
       },
     },
-    select: {
-      name: true,
-      email: true,
-      age: true,
+  });
+  const user = await prisma.user.findMany({
+    where: {
+      AND: {
+        name: { startsWith: "Umair Khan" },
+        age: { lte: 30 },
+      },
     },
   });
   console.log(user);
